@@ -1,6 +1,7 @@
 package com.github.luccassantos4.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.jackson.Jacksonized;
@@ -11,9 +12,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
+@Builder
 @Jacksonized
 public class ProductDTO {
 
@@ -33,4 +35,5 @@ public class ProductDTO {
 
     @NotNull(message = "Price is Required")
     private BigDecimal price;
+
 }

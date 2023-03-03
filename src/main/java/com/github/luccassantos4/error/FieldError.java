@@ -1,4 +1,4 @@
-package com.github.luccassantos4.dto;
+package com.github.luccassantos4.error;
 
 public class FieldError {
 	private String field;

@@ -2,12 +2,14 @@ package com.github.luccassantos4.service;
 
 import com.github.luccassantos4.dto.ProductDTO;
 import com.github.luccassantos4.entity.ProductEntity;
+import com.github.luccassantos4.interfaces.IProductMappear;
 import com.github.luccassantos4.repository.ProductRepository;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class ProductService {
@@ -15,33 +17,27 @@ public class ProductService {
     @Inject
     ProductRepository productRepository;
 
+    @Inject
+    IProductMappear productMappear;
+
     public List<ProductDTO> getAllProducts(){
 
         List<ProductDTO> products = new ArrayList<>();
 
+        /* methods 1 */
         productRepository.findAll().stream().forEach(item -> {
-            products.add(mapProductsEntityToDTO(item));
+            products.add(productMappear.toDto(item));
         });
 
         return products;
+
+        /* methods 2 */
+//        return	productRepository.findAll().stream().
+//                map(item-> mapper.toDto(item)).collect(Collectors.toList());
     }
 
     public void createNewProduct(ProductDTO productDTO){
-        productRepository.persist(mapProductsDtoToEntity(productDTO));
-    }
-
-    public void updateProduct(Long id, ProductDTO productDto){
-
-        ProductEntity productEntity = productRepository.findById(id);
-
-        productEntity.setName(productDto.getName());
-        productEntity.setDescription(productDto.getDescription());
-        productEntity.setCategory(productDto.getCategory());
-        productEntity.setModel(productDto.getModel());
-        productEntity.setPrice(productDto.getPrice());
-
-
-        productRepository.persist(productEntity);
+        productRepository.persist(productMappear.toEntity(productDTO));
     }
 
     public void deleteProduct(Long id){
@@ -49,29 +45,44 @@ public class ProductService {
     }
 
 
-    private ProductDTO mapProductsEntityToDTO(ProductEntity productEntity){
+    public void updateProduct(Long id, ProductDTO productDto){
 
-        ProductDTO product = new ProductDTO();
+        ProductEntity productEntity = productRepository.findById(id);
+        productMappear.updateProductFromDto(productDto, productEntity);
 
-        product.setName(productEntity.getName());
-        product.setDescription(productEntity.getDescription());
-        product.setCategory(productEntity.getCategory());
-        product.setModel(productEntity.getModel());
-        product.setPrice(productEntity.getPrice());
+        productRepository.persist(productEntity);
 
-        return product;
+    /*    productEntity.setName(productDto.getName());
+        productEntity.setDescription(productDto.getDescription());
+        productEntity.setCategory(productDto.getCategory());
+        productEntity.setModel(productDto.getModel());
+        productEntity.setPrice(productDto.getPrice());*/
     }
 
-    private ProductEntity mapProductsDtoToEntity(ProductDTO productDTO){
 
-        ProductEntity product = new ProductEntity();
+//    private ProductDTO mapProductsEntityToDTO(ProductEntity productEntity){
+//
+//        ProductDTO productDTO = new ProductDTO();
+//
+//        productDTO.setName(productEntity.getName());
+//        productDTO.setDescription(productEntity.getDescription());
+//        productDTO.setCategory(productEntity.getCategory());
+//        productDTO.setModel(productEntity.getModel());
+//        productDTO.setPrice(productEntity.getPrice());
+//
+//        return productDTO;
+//    }
 
-        product.setName(productDTO.getName());
-        product.setDescription(productDTO.getDescription());
-        product.setCategory(productDTO.getCategory());
-        product.setModel(productDTO.getModel());
-        product.setPrice(productDTO.getPrice());
-
-        return product;
-    }
+//    private ProductEntity mapProductsDtoToEntity(ProductDTO productDTO){
+//
+//        ProductEntity product = new ProductEntity();
+//
+//        product.setName(productDTO.getName());
+//        product.setDescription(productDTO.getDescription());
+//        product.setCategory(productDTO.getCategory());
+//        product.setModel(productDTO.getModel());
+//        product.setPrice(productDTO.getPrice());
+//
+//        return product;
+//    }
 }

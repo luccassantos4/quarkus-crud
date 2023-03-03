@@ -11,10 +11,10 @@ import javax.persistence.Table;
 import java.math.BigDecimal;
 
 @Entity
-@Table
-@Data
+@Table(name="product")
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class ProductEntity {
 
     @Id
@@ -30,5 +30,4 @@ public class ProductEntity {
     private String model;
 
     private BigDecimal price;
-
 }

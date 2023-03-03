@@ -1,4 +1,4 @@
-package com.github.luccassantos4.dto;
+package com.github.luccassantos4.error;
 
 import lombok.Data;
 

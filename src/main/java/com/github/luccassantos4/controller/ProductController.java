@@ -1,7 +1,7 @@
 package com.github.luccassantos4.controller;
 
 import com.github.luccassantos4.dto.ProductDTO;
-import com.github.luccassantos4.dto.ResponseError;
+import com.github.luccassantos4.error.ResponseError;
 import com.github.luccassantos4.service.ProductService;
 
 import javax.inject.Inject;
@@ -11,7 +11,6 @@ import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.awt.*;
 import java.util.List;
 import java.util.Set;
 
@@ -40,7 +39,6 @@ public class ProductController {
             return ResponseError.createFromValidation(violations).withStatusCode(400);
         }
 
-
         try {
             productService.createNewProduct(productDTO);
             return Response.ok().build();
@@ -48,14 +46,15 @@ public class ProductController {
         }catch (Exception e){
             e.printStackTrace();
             return Response.serverError().build();
-
         }
     }
 
     @PUT
     @Path("/{id}")
     @Transactional
-    public Response saveProduct(@PathParam("id") Long id, ProductDTO productDTO){
+
+
+    public Response updateProduct(@PathParam("id") Long id, ProductDTO productDTO){
 
         try {
             productService.updateProduct(id, productDTO);
@@ -71,7 +70,7 @@ public class ProductController {
     @DELETE
     @Path("/{id}")
     @Transactional
-    public Response saveProduct(@PathParam("id") Long id){
+    public Response deleteProduct(@PathParam("id") Long id){
 
         try {
             productService.deleteProduct(id);
