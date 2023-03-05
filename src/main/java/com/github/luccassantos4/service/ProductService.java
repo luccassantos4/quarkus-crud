@@ -4,11 +4,13 @@ import com.github.luccassantos4.dto.ProductDTO;
 import com.github.luccassantos4.entity.ProductEntity;
 import com.github.luccassantos4.interfaces.IProductMappear;
 import com.github.luccassantos4.repository.ProductRepository;
+import com.github.luccassantos4.service.exceptions.ResourceNotFoundException;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
@@ -34,6 +36,16 @@ public class ProductService {
         /* methods 2 */
 //        return	productRepository.findAll().stream().
 //                map(item-> mapper.toDto(item)).collect(Collectors.toList());
+    }
+
+    public ProductDTO getProductsById(Long id){
+
+        ProductEntity entity = productRepository.findById(id);
+
+        return new ProductDTO(productMappear.toDto(entity));
+
+//        Optional<ProductEntity> obj = Optional.ofNullable(productRepository.findById(id));
+//        ProductEntity entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
     }
 
     public void createNewProduct(ProductDTO productDTO){

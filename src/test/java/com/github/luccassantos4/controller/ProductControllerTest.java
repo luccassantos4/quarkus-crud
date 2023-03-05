@@ -21,6 +21,25 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestHTTPEndpoint(ProductController.class)
 class ProductControllerTest {
 
+    @Inject
+    ProductRepository productRepository;
+
+    Long productId;
+
+    @BeforeEach
+    @Transactional
+    void setUp() {
+
+        var product = new ProductEntity();
+        product.setDescription("MEMORIA DE 250G");
+        product.setName("PS4 DESBLOQUEADO");
+        product.setCategory("NOVO");
+        product.setModel("SLIM");
+        product.setPrice(BigDecimal.valueOf(3000.00));
+        productRepository.persist(product);
+        productId = product.getId();
+    }
+
     @Test
     @DisplayName("Retornar lista de produtos cadastrados")
     void findAllProducts() {

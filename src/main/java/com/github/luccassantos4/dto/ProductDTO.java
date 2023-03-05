@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.jackson.Jacksonized;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -36,4 +35,11 @@ public class ProductDTO {
     @NotNull(message = "Price is Required")
     private BigDecimal price;
 
+    public ProductDTO(ProductDTO entity) {
+        this.name = entity.getName();
+        this.description = entity.getDescription();
+        this.category = entity.getCategory();
+        this.model = entity.getModel();
+        this.price = entity.getPrice();
+    }
 }

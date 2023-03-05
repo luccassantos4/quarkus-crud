@@ -7,6 +7,7 @@ import com.github.luccassantos4.service.ProductService;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.validation.ConstraintViolation;
+import javax.validation.Valid;
 import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -29,15 +30,19 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{id}")
+    public Response listProductsById(@PathParam("id") Long id) {
+
+        ProductDTO dto = productService.getProductsById(id);
+
+        return Response.ok().entity(dto).build();
+    }
+
     @POST
     @Transactional
-    public Response saveProduct(ProductDTO productDTO){
-
-        //Tratativa para as validações (Erros Personalizados)
-        Set<ConstraintViolation<ProductDTO>> violations = validator.validate(productDTO);
-        if (!violations.isEmpty()) {
-            return ResponseError.createFromValidation(violations).withStatusCode(400);
-        }
+    public Response saveProduct(@Valid ProductDTO productDTO){
 
         try {
             productService.createNewProduct(productDTO);
@@ -52,9 +57,7 @@ public class ProductController {
     @PUT
     @Path("/{id}")
     @Transactional
-
-
-    public Response updateProduct(@PathParam("id") Long id, ProductDTO productDTO){
+    public Response updateProduct(@PathParam("id") Long id, @Valid ProductDTO productDTO){
 
         try {
             productService.updateProduct(id, productDTO);
