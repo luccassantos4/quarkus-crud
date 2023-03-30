@@ -41,7 +41,6 @@ public class ProductService {
     public ProductDTO getProductsById(Long id){
 
         ProductEntity entity = productRepository.findById(id);
-
         return new ProductDTO(productMappear.toDto(entity));
 
 //        Optional<ProductEntity> obj = Optional.ofNullable(productRepository.findById(id));

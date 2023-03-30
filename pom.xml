@@ -7,7 +7,10 @@
   <version>1.0.0-SNAPSHOT</version>
   <properties>
     <compiler-plugin.version>3.10.1</compiler-plugin.version>
+    <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
     <maven.compiler.release>11</maven.compiler.release>
+    <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
+    <org.projectlombok.version>1.18.20</org.projectlombok.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
@@ -15,9 +18,6 @@
     <quarkus.platform.version>2.16.3.Final</quarkus.platform.version>
     <skipITs>true</skipITs>
     <surefire-plugin.version>3.0.0-M7</surefire-plugin.version>
-    <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
-    <org.projectlombok.version>1.18.20</org.projectlombok.version>
-    <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -68,6 +68,10 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jacoco</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
       <scope>test</scope>
     </dependency>
@@ -80,9 +84,52 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-hibernate-validator</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jdbc-h2</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-vertx</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-undertow</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>jquery</artifactId>
+      <version>3.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-webjars-locator</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
+
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.4</version>
+        <executions>
+          <execution>
+            <id>default-prepare-agent</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>jacoco-report</id>
+            <phase>test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
       <plugin>
         <groupId>${quarkus.platform.group-id}</groupId>
         <artifactId>quarkus-maven-plugin</artifactId>
@@ -99,12 +146,11 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.1</version>
         <configuration>
-          <source>1.8</source> <!-- depending on your project -->
-          <target>1.8</target> <!-- depending on your project -->
+          <source>1.8</source>
+          <target>1.8</target>
           <compilerArgs>
             <arg>-parameters</arg>
           </compilerArgs>
@@ -156,7 +202,6 @@
           </execution>
         </executions>
       </plugin>
-
     </plugins>
   </build>
   <profiles>
