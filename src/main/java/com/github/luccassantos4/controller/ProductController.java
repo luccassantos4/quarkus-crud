@@ -1,22 +1,24 @@
 package com.github.luccassantos4.controller;
 
 import com.github.luccassantos4.dto.ProductDTO;
-import com.github.luccassantos4.error.ResponseError;
 import com.github.luccassantos4.service.ProductService;
-
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
-import java.util.Set;
 
 @Path("/api/products")
+@Slf4j
 public class ProductController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
     @Inject
     ProductService productService;
@@ -43,6 +45,8 @@ public class ProductController {
     @POST
     @Transactional
     public Response saveProduct(@Valid ProductDTO productDTO){
+
+        logger.info(String.valueOf(productDTO));
 
         try {
             productService.createNewProduct(productDTO);
