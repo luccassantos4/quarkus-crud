@@ -1,9 +1,6 @@
 package com.github.luccassantos4.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.extern.jackson.Jacksonized;
 
 import javax.validation.constraints.NotBlank;
@@ -13,9 +10,10 @@ import java.math.BigDecimal;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Builder
 @Jacksonized
+@Getter
+@Setter
 public class ProductDTO {
 
     @NotBlank(message = "Name is Required")

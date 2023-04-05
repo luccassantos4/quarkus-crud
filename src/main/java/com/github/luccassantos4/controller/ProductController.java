@@ -14,7 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-@Path("/api/products")
+@Path("/products")
 @Slf4j
 public class ProductController {
 
@@ -48,30 +48,16 @@ public class ProductController {
 
         logger.info(String.valueOf(productDTO));
 
-        try {
-            productService.createNewProduct(productDTO);
-            return Response.ok().build();
-
-        }catch (Exception e){
-            e.printStackTrace();
-            return Response.serverError().build();
-        }
+        productService.createNewProduct(productDTO);
+        return Response.ok().build();
     }
 
     @PUT
     @Path("/{id}")
     @Transactional
     public Response updateProduct(@PathParam("id") Long id, @Valid ProductDTO productDTO){
-
-        try {
             productService.updateProduct(id, productDTO);
             return Response.ok().build();
-
-        }catch (Exception e){
-            e.printStackTrace();
-            return Response.serverError().build();
-
-        }
     }
 
     @DELETE
@@ -79,15 +65,14 @@ public class ProductController {
     @Transactional
     public Response deleteProduct(@PathParam("id") Long id){
 
-        try {
+//        try {
             productService.deleteProduct(id);
             return Response.ok().build();
 
-        }catch (Exception e){
-            e.printStackTrace();
-            return Response.serverError().build();
-
-        }
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            return Response.serverError().build();
+//        }
     }
 
 

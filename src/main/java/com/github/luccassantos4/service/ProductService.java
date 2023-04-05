@@ -8,10 +8,12 @@ import com.github.luccassantos4.service.exceptions.ResourceNotFoundException;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.persistence.EntityNotFoundException;
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
 @ApplicationScoped
 public class ProductService {
@@ -51,49 +53,28 @@ public class ProductService {
         productRepository.persist(productMappear.toEntity(productDTO));
     }
 
-    public void deleteProduct(Long id){
-        productRepository.deleteById(id);
+    public Response deleteProduct(Long id) {
+
+        boolean deleted;
+
+        try {
+            deleted = productRepository.deleteById(id);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Id not found " + id);
+        }
+
+        return deleted ? Response.noContent().build() : Response.status(NOT_FOUND).build();
     }
 
 
     public void updateProduct(Long id, ProductDTO productDto){
-
-        ProductEntity productEntity = productRepository.findById(id);
-        productMappear.updateProductFromDto(productDto, productEntity);
-
-        productRepository.persist(productEntity);
-
-    /*    productEntity.setName(productDto.getName());
-        productEntity.setDescription(productDto.getDescription());
-        productEntity.setCategory(productDto.getCategory());
-        productEntity.setModel(productDto.getModel());
-        productEntity.setPrice(productDto.getPrice());*/
+        try {
+            ProductEntity productEntity = productRepository.findById(id);
+            productMappear.updateProductFromDto(productDto, productEntity);
+            productRepository.persist(productEntity);
+        }
+        catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Id not found " + id);
+        }
     }
-
-
-//    private ProductDTO mapProductsEntityToDTO(ProductEntity productEntity){
-//
-//        ProductDTO productDTO = new ProductDTO();
-//
-//        productDTO.setName(productEntity.getName());
-//        productDTO.setDescription(productEntity.getDescription());
-//        productDTO.setCategory(productEntity.getCategory());
-//        productDTO.setModel(productEntity.getModel());
-//        productDTO.setPrice(productEntity.getPrice());
-//
-//        return productDTO;
-//    }
-
-//    private ProductEntity mapProductsDtoToEntity(ProductDTO productDTO){
-//
-//        ProductEntity product = new ProductEntity();
-//
-//        product.setName(productDTO.getName());
-//        product.setDescription(productDTO.getDescription());
-//        product.setCategory(productDTO.getCategory());
-//        product.setModel(productDTO.getModel());
-//        product.setPrice(productDTO.getPrice());
-//
-//        return product;
-//    }
 }
